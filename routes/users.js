@@ -1,54 +1,21 @@
 const express = require('express')
 const router = express.Router();
-const users = require('../data/index')
+const userController = require('../controllers/users')
 const sampleUser = require('../data/sampleUser')
 
 // Get all users
-router.get('/users/', (req, res) => res.json(users));
+router.get('/users/', userController.list);
 
 // Get one user
-router.get('/users/:id', (req, res) => {
-    const found = users.some(user => user.id === parseInt(req.params.id));
-    if(found) {
-        res.json(users.filter(user => user.id === parseInt(req.params.id)))
-    } else {
-        res.status(400).json({ msg: 'User not found'})
-    }
-})
+router.get('/users/:id', userController.show)
 
 // Post new user
-router.post('/users/', (req, res) => {
-    const newUser = sampleUser
-    newUser.id = users.length + 1
-    users.push(newUser)
-    res.json(users)
-})
+router.post('/users/', userController.create)
 
 // Update user
-router.put('/users/:id', (req, res) => {
-    const found = users.some(user => user.id === parseInt(req.params.id));
-    if(found) {
-        let userToUpdate = users.filter(user => user.id === parseInt(req.params.id));
-        userToUpdate = sampleUser
-        const userIdNumber = parseInt(req.params.id)
-        userToUpdate.id = userIdNumber
-        users.splice(userIdNumber-1, 1, userToUpdate)
-        res.json(users)
-    } else {
-        res.status(400).json({ msg: 'User not found'})
-    }
-})
+router.put('/users/:id', userController.updateUser)
 
 // Delete user
-router.delete('/users/:id', (req, res) => {
-    const found = users.some(user => user.id === parseInt(req.params.id));
-    if(found) {
-        const userIdNumber = parseInt(req.params.id)
-        users.splice(userIdNumber-1, 1)
-        res.json(users)
-    } else {
-        res.status(400).json({ msg: 'User not found'})
-    }
-})
+router.delete('/users/:id', userController.deleteUser)
 
 module.exports = router;
