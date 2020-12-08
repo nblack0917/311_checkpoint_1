@@ -46,9 +46,12 @@ const updateUser = (req, res) => {
 const deleteUser = (req, res) => {
     const found = users.some(user => user.id === parseInt(req.params.id));
     if(found) {
+        // let userToUpdate = users.filter(user => user.id === parseInt(req.params.id));
+        // console.log(userToUpdate)
+        // userToUpdate[0].status = "deleted"
         const userIdNumber = parseInt(req.params.id)
         users.splice(userIdNumber-1, 1)
-        res.json(users)
+        res.json({ msg: `User # ${parseInt(req.params.id)} has been deleted`})
     } else {
         res.status(400).json({ msg: 'User not found'})
     }
